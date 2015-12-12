@@ -9,6 +9,7 @@ hook.Add("CanPlayerSuicide","FUCK YOU BILL",FuckYouBill)
 
 
 function SuperSpawnProtectionPlayerSpawn(ply)
+	ply:SetMaterial("debug/env_cubemap_model")
 	ply.ImmuneFromDamage = true
 	ply.SpawnImmunityTime = CurTime() + 3
 end
@@ -23,14 +24,14 @@ function SuperSpawnProtectionThink()
 			
 				if ply.SpawnImmunityTime <= CurTime() then
 					ply:ChatPrint("Your spawn protection has worn off.")
+					ply:SetMaterial("")
 					ply.ImmuneFromDamage = false
-					ply:SetHealth(100)
 				end
 				
 				if ply:KeyDown(IN_ATTACK) and ply.SpawnImmunityTime - 1 <= CurTime() then
 					ply:ChatPrint("Your spawn protection has worn off.")
+					ply:SetMaterial("")
 					ply.ImmuneFromDamage = false
-					ply:SetHealth(100)
 				end
 				
 			end
@@ -52,8 +53,7 @@ end
 hook.Add( "PlayerShouldTakeDamage", "Spawn Protection PlayerShouldTakeDamage", SuperSpawnProtectionPlayerShouldTakeDamage )
 
 
-local GlobalCritChance = 10
-local GlobalCritMul	= 2
+local GlobalCritChance = 5
 local GlobalCritAdd = 1
 
 function BurCritDamage(victim,hitgroup,dmginfo)
@@ -66,9 +66,13 @@ function BurCritDamage(victim,hitgroup,dmginfo)
 			attacker.CritChance = GlobalCritChance
 		end
 		
-		if math.random(1,100) <= attacker.CritChance then
+		local Random = math.random(1,100)
+		
+		--print(Random,attacker.CritChance)
+		
+		if Random <= attacker.CritChance then
 			dmginfo:ScaleDamage(2)
-			print(attacker:Name() .. " scored a critical hit on " .. victim:Name())
+			--print(attacker:Name() .. " scored a critical hit on " .. victim:Name())
 			
 			victim:EmitSound("player/crit_received"..math.random(1,3)..".wav")
 			attacker:EmitSound("player/crit_hit"..math.random(2,5)..".wav")
