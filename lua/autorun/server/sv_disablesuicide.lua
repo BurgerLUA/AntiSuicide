@@ -1,8 +1,8 @@
 local RudeTable = {"Eva Braun","Kurt Colbain","Christopher Dorner","Adolf Hitler","Robin Williams"}
 
 function FuckYouBill(player)
-	player:ChatPrint("Calm down there " .. RudeTable[math.random(1,#RudeTable)] .. "." )
-	return false
+	--player:ChatPrint("Calm down there " .. RudeTable[math.random(1,#RudeTable)] .. "." )
+	--return false
 end
 
 hook.Add("CanPlayerSuicide","FUCK YOU BILL",FuckYouBill)
