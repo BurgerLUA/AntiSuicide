@@ -10,7 +10,7 @@ hook.Add("CanPlayerSuicide","FUCK YOU BILL",FuckYouBill)
 
 function SuperSpawnProtectionPlayerSpawn(ply)
 	ply:SetMaterial("debug/env_cubemap_model")
-	ply.ImmuneFromDamage = true
+	ply:GodEnable()
 	ply.SpawnImmunityTime = CurTime() + 3
 end
 
@@ -20,18 +20,18 @@ hook.Add( "PlayerSpawn", "Spawn Protection Spawn", SuperSpawnProtectionPlayerSpa
 function SuperSpawnProtectionThink()
 	for k,ply in pairs(player.GetAll()) do
 		if ply:Alive() == true then
-			if ply.ImmuneFromDamage == true then
+			if ply:HasGodMode() then
 			
 				if ply.SpawnImmunityTime <= CurTime() then
 					ply:ChatPrint("Your spawn protection has worn off.")
 					ply:SetMaterial("")
-					ply.ImmuneFromDamage = false
+					ply:GodDisable()
 				end
 				
 				if ply:KeyDown(IN_ATTACK) and ply.SpawnImmunityTime - 1 <= CurTime() then
 					ply:ChatPrint("Your spawn protection has worn off.")
 					ply:SetMaterial("")
-					ply.ImmuneFromDamage = false
+					ply:GodDisable()
 				end
 				
 			end
@@ -43,11 +43,11 @@ hook.Add( "Think", "Spawn Protection Think", SuperSpawnProtectionThink )
 
 
 function SuperSpawnProtectionPlayerShouldTakeDamage(ply,attacker)
-
+	--[[
 	if ply.ImmuneFromDamage == true then
 		return false
 	end
-
+	--]]
 end
 
 hook.Add( "PlayerShouldTakeDamage", "Spawn Protection PlayerShouldTakeDamage", SuperSpawnProtectionPlayerShouldTakeDamage )
