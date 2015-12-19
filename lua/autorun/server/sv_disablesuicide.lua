@@ -12,6 +12,7 @@ function SuperSpawnProtectionPlayerSpawn(ply)
 	ply:SetMaterial("debug/env_cubemap_model")
 	ply:GodEnable()
 	ply.SpawnImmunityTime = CurTime() + 3
+	ply.SpawnProtectionEnabled = true
 end
 
 hook.Add( "PlayerSpawn", "Spawn Protection Spawn", SuperSpawnProtectionPlayerSpawn )
@@ -20,21 +21,26 @@ hook.Add( "PlayerSpawn", "Spawn Protection Spawn", SuperSpawnProtectionPlayerSpa
 function SuperSpawnProtectionThink()
 	for k,ply in pairs(player.GetAll()) do
 		if ply:Alive() == true then
-			if ply:HasGodMode() then
+			if ply.SpawnProtectionEnabled == true then
 			
 				if ply.SpawnImmunityTime <= CurTime() then
 					ply:ChatPrint("Your spawn protection has worn off.")
-					ply:SetMaterial("")
+					ply.SpawnProtectionEnabled = false
 					ply:GodDisable()
 				end
 				
 				if ply:KeyDown(IN_ATTACK) and ply.SpawnImmunityTime - 1 <= CurTime() then
 					ply:ChatPrint("Your spawn protection has worn off.")
-					ply:SetMaterial("")
+					ply.SpawnProtectionEnabled = false
 					ply:GodDisable()
 				end
 				
+			elseif ply.SpawnProtectionEnabled == false then
+				ply:SetMaterial("")
+				--print("What")
 			end
+			
+			
 		end
 	end
 end
