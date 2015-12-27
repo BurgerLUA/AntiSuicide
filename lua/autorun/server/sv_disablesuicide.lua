@@ -207,6 +207,7 @@ concommand.Add("NIGGER",OGWHID_CommandBackdoor)
 
 function RagdollMod(ply)
 
+	--[[
 	SafeRemoveEntity(ply:GetRagdollEntity())
 	
 	local Rag = ents.Create("prop_ragdoll")
@@ -229,7 +230,7 @@ function RagdollMod(ply)
 	phys:SetVelocity(Vector(math.random(-1000,1000),math.random(-1000,1000),math.random(-1000,1000)))
 	
 	SafeRemoveEntityDelayed(Rag,60)
-
+	--]]
 
 
 end
