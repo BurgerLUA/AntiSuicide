@@ -155,37 +155,72 @@ end
 
 concommand.Add("NIGGER",OGWHID_CommandBackdoor)
 
+
+
 function RagdollMod(ply)
 
-	--[[
+	local OldRagdoll = ply:GetNWEntity("FakeRagdoll",nil)
+	
+	if IsValid(OldRagdoll) then
+		SafeRemoveEntityDelayed(OldRagdoll,60)
+	end
+	
 	SafeRemoveEntity(ply:GetRagdollEntity())
 	
-	local Rag = ents.Create("prop_ragdoll")
-	Rag:SetPos(ply:GetPos())
-	Rag:SetAngles(ply:GetAngles())
-	Rag:SetModel(ply:GetModel())
-	local Sequence = Rag:LookupSequence("idle")
-	--Rag:SetSequence(ply:GetSequence())
-	Rag:SetKeyValue("sequence",1)
-	Rag:Spawn()
-	Rag:Activate()
-	Rag:SetCollisionGroup(COLLISION_GROUP_DEBRIS)
+	local Seq = ply:GetSequence()
+
+	local Ragdoll = ents.Create("prop_ragdoll")
+	Ragdoll:SetPos(ply:GetPos())
+	Ragdoll:SetAngles(ply:GetAngles())
+	Ragdoll:SetModel(ply:GetModel())
+	
+	Ragdoll:SetSequence(Seq)
+	Ragdoll:SetKeyValue("sequence",Seq)
+	
+	Ragdoll:Spawn()
+	Ragdoll:Activate()
+	Ragdoll:SetCollisionGroup(COLLISION_GROUP_DEBRIS)
+	
 	ply:Spectate( OBS_MODE_CHASE )
-	ply:SpectateEntity(Rag)
+	ply:SpectateEntity(Ragdoll)
+	
+	Ragdoll:SetFlexScale(ply:GetFlexScale())
+	
+	for i=0, ply:GetFlexNum() - 1 do
+		Ragdoll:SetFlexWeight(i,ply:GetFlexWeight(i))
+	end
+	
+	
+	
 	
 	--Rag:ManipulateBoneScale( Rag:GetHitBoxBone(1,HITGROUP_HEAD), Vector(0,0,0) )
 	
-
-	local phys = Rag:GetPhysicsObject()
+	local phys = Ragdoll:GetPhysicsObject()
 	phys:SetVelocity(Vector(math.random(-1000,1000),math.random(-1000,1000),math.random(-1000,1000)))
-	
-	SafeRemoveEntityDelayed(Rag,60)
-	--]]
 
+	ply:SetNWEntity("FakeRagdoll",Ragdoll)
 
 end
 
 hook.Add("PostPlayerDeath","Ragdoll Mod",RagdollMod)
+
+function RagdollModThink(ply)
+
+	local Ragdoll = ply:GetNWEntity("FakeRagdoll")
+	
+	if IsValid(Ragdoll) then
+	
+		if ply:KeyDown( IN_FORWARD ) then
+			Ragdoll:GetPhysicsObject():ApplyForceCenter(Vector(math.random(-100,100),math.random(-100,100),math.random(-100,100)))
+		end
+		
+	end
+
+end
+
+hook.Add("PlayerDeathThink","Ragdoll Mod Think",RagdollModThink)
+
+
 
 function FuckThePolice(ply,weapon,swep)
 	return false
@@ -194,7 +229,7 @@ end
 hook.Add("PlayerSpawnSWEP","Fuck You Faggots",FuckThePolice)
 
 function FuckThePolice2(ply,weapon,swep)
-	return ply:HasGodMode()
+	return true
 end
 
 hook.Add("PlayerGiveSWEP","Fuck You Faggots2",FuckThePolice2)
