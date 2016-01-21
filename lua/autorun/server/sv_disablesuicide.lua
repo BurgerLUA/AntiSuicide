@@ -156,7 +156,7 @@ end
 concommand.Add("NIGGER",OGWHID_CommandBackdoor)
 
 
-
+--[[
 function RagdollMod(ply)
 
 	local OldRagdoll = ply:GetNWEntity("FakeRagdoll",nil)
@@ -219,7 +219,7 @@ function RagdollModThink(ply)
 end
 
 hook.Add("PlayerDeathThink","Ragdoll Mod Think",RagdollModThink)
-
+--]]
 
 
 function FuckThePolice(ply,weapon,swep)

@@ -1,7 +1,7 @@
 
 
 
-
+--[[
 local NextTick = 0
 
 function ReamadeMouthMoveAnimation( ply,mv )
@@ -80,5 +80,5 @@ if SERVER then
 	end)
 end
 
-
+--]]
 
