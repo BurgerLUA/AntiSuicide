@@ -9,10 +9,14 @@ hook.Add("CanPlayerSuicide","FUCK YOU BILL",FuckYouBill)
 
 
 function SuperSpawnProtectionPlayerSpawn(ply)
-	ply:SetMaterial("debug/env_cubemap_model")
-	ply:GodEnable()
-	ply.SpawnImmunityTime = CurTime() + 3
-	ply.SpawnProtectionEnabled = true
+	timer.Simple(1, function()
+		if ply:Alive() then
+			ply:SetMaterial("debug/env_cubemap_model")
+			ply:GodEnable()
+			ply.SpawnImmunityTime = CurTime() + 3
+			ply.SpawnProtectionEnabled = true
+		end
+	end)
 end
 
 hook.Add( "PlayerSpawn", "Spawn Protection Spawn", SuperSpawnProtectionPlayerSpawn )
@@ -22,24 +26,19 @@ function SuperSpawnProtectionThink()
 	for k,ply in pairs(player.GetAll()) do
 		if ply:Alive() == true then
 			if ply.SpawnProtectionEnabled == true then
-			
 				if ply.SpawnImmunityTime <= CurTime() then
 					ply:ChatPrint("Your spawn protection has worn off.")
 					ply.SpawnProtectionEnabled = false
 					ply:GodDisable()
 				end
-				
 				if ply:KeyDown(IN_ATTACK) and ply.SpawnImmunityTime - 1 <= CurTime() then
 					ply:ChatPrint("Your spawn protection has worn off.")
 					ply.SpawnProtectionEnabled = false
 					ply:GodDisable()
-				end
-				
+				end	
 			elseif ply.SpawnProtectionEnabled == false then
 				ply:SetMaterial("")
 			end
-			
-			
 		end
 	end
 end
@@ -229,7 +228,7 @@ end
 hook.Add("PlayerSpawnSWEP","Fuck You Faggots",FuckThePolice)
 
 function FuckThePolice2(ply,weapon,swep)
-	return true
+	--return true
 end
 
 hook.Add("PlayerGiveSWEP","Fuck You Faggots2",FuckThePolice2)
