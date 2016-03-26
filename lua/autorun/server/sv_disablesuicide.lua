@@ -9,7 +9,7 @@ hook.Add("CanPlayerSuicide","FUCK YOU BILL",FuckYouBill)
 
 
 function SuperSpawnProtectionPlayerSpawn(ply)
-	timer.Simple(1, function()
+	timer.Simple(0.01, function()
 		if ply:Alive() then
 			ply:SetMaterial("debug/env_cubemap_model")
 			ply:GodEnable()
